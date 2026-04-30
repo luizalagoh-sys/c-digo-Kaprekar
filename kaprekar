@@ -1,0 +1,82 @@
+# Função para extrair dígitos sem usar strings
+def extrair_digitos(n):
+    d1 = n // 1000
+    d2 = (n % 1000) // 100
+    d3 = (n % 100) // 10
+    d4 = n % 10
+    return [d1, d2, d3, d4]
+
+# Função para ordenar crescente (bubble sort simples)
+def ordenar_crescente(lista):
+    for i in range(4):
+        for j in range(3):
+            if lista[j] > lista[j+1]:
+                temp = lista[j]
+                lista[j] = lista[j+1]
+                lista[j+1] = temp
+    return lista
+
+# Função para ordenar decrescente
+def ordenar_decrescente(lista):
+    for i in range(4):
+        for j in range(3):
+            if lista[j] < lista[j+1]:
+                temp = lista[j]
+                lista[j] = lista[j+1]
+                lista[j+1] = temp
+    return lista
+
+# Função para montar número a partir dos dígitos
+def montar_numero(lista):
+    return lista[0]*1000 + lista[1]*100 + lista[2]*10 + lista[3]
+
+# Entrada
+n = int(input("Digite um número: "))
+
+# 1. Validação de tipo
+if n <= 0:
+    print("Erro: número deve ser inteiro positivo.")
+else:
+
+    # 2. Validação de faixa
+    if n < 0 or n > 9999:
+        print("Erro: número fora da faixa (0000 a 9999).")
+    else:
+
+        # 3. Validação de repetição
+        dig = extrair_digitos(n)
+
+        cont = [0]*10
+        for d in dig:
+            cont[d] += 1
+
+        repetido = False
+        for i in range(10):
+            if cont[i] >= 3:
+                repetido = True
+
+        if repetido:
+            print("Erro: muitos dígitos repetidos.")
+        else:
+            print("Número informado:", n)
+
+            iteracao = 0
+
+            while n != 6174:
+                iteracao += 1
+
+                dig = extrair_digitos(n)
+
+                crescente = ordenar_crescente(dig.copy())
+                decrescente = ordenar_decrescente(dig.copy())
+
+                ndc = montar_numero(crescente)
+                ndd = montar_numero(decrescente)
+
+                resultado = ndd - ndc
+
+                print("Iteração", iteracao, ":", ndd, "-", ndc, "=", resultado)
+
+                n = resultado
+
+            print("\nConstante de Kaprekar (6174) atingida em", iteracao, "iterações.")
